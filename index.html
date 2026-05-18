@@ -36,6 +36,10 @@
                     <!-- 切换箭头 -->
                     <button class="slide-arrow prev" onclick="moveSlide(-1)"><i class="fas fa-chevron-left"></i></button>
                     <button class="slide-arrow next" onclick="moveSlide(1)"><i class="fas fa-chevron-right"></i></button>
+                    
+                    <!-- 新增：图片文字描述栏 -->
+                    <div class="slider-caption" id="slider-caption"></div>
+                    
                     <!-- 页码指示器 -->
                     <div class="slider-dots" id="slider-dots"></div>
                 </div>
@@ -55,9 +59,7 @@
                         <p id="info-history"></p>
                     </div>
 
-                    <div id="info-link-container">
-                        <!-- 官方入口由JS动态生成 -->
-                    </div>
+                    <div id="info-link-container"></div>
                 </div>
             </div>
         </div>

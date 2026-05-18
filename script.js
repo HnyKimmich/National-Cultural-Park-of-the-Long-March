@@ -36,6 +36,7 @@ parkData.forEach(park => {
 // 4. 弹窗控制与数据渲染
 let currentSlideIndex = 0;
 let totalSlides = 0;
+let currentImagesArray = []; // 用来缓存当前公园的图片数组
 
 function openModal(park) {
     // 填充文本与标签
@@ -52,7 +53,7 @@ function openModal(park) {
         });
     }
 
-    // 渲染官方入口按钮（如果为空则隐藏）
+    // 渲染官方入口按钮
     const linkContainer = document.getElementById('info-link-container');
     if (park.officialLink) {
         linkContainer.innerHTML = `<a href="${park.officialLink}" target="_blank" class="btn-link">访问官方介绍入口 <i class="fas fa-external-link-alt"></i></a>`;
@@ -60,7 +61,7 @@ function openModal(park) {
         linkContainer.innerHTML = '';
     }
 
-    // 渲染高级滑动图片栏
+    // 渲染图片栏
     const wrapper = document.getElementById('slider-wrapper');
     const dotsContainer = document.getElementById('slider-dots');
     const sliderContainer = document.getElementById('slider-container');
@@ -68,26 +69,26 @@ function openModal(park) {
     wrapper.innerHTML = '';
     dotsContainer.innerHTML = '';
     currentSlideIndex = 0;
+    currentImagesArray = park.images || []; // 存入全局变量供切换时读取
 
-    if (park.images && park.images.length > 0) {
-        sliderContainer.style.display = 'block'; // 显示图片区域
-        totalSlides = park.images.length;
+    if (currentImagesArray.length > 0) {
+        sliderContainer.style.display = 'block';
+        totalSlides = currentImagesArray.length;
         
-        park.images.forEach((imgUrl, index) => {
-            wrapper.innerHTML += `<img src="${imgUrl}" alt="${park.name}">`;
+        currentImagesArray.forEach((imgObj, index) => {
+            // 注意：这里读取的是 imgObj.url
+            wrapper.innerHTML += `<img src="${imgObj.url}" alt="${park.name}">`;
             dotsContainer.innerHTML += `<div class="dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>`;
         });
-        updateSliderPosition();
         
-        // 如果只有一张图，隐藏切换箭头
+        updateSliderPosition(); // 更新图片位置和描述
+        
         const arrows = document.querySelectorAll('.slide-arrow');
         arrows.forEach(arrow => arrow.style.display = totalSlides <= 1 ? 'none' : 'block');
     } else {
-        // 如果没有任何图片，直接隐藏整个左侧图片栏
         sliderContainer.style.display = 'none';
     }
 
-    // 激活弹窗显现
     document.getElementById('details-modal').classList.add('active');
 }
 
@@ -95,7 +96,7 @@ function closeModal() {
     document.getElementById('details-modal').classList.remove('active');
 }
 
-// 5. 高级阻尼滑动轮播图逻辑
+// 5. 轮播图滑动及描述更新逻辑
 function moveSlide(direction) {
     currentSlideIndex += direction;
     if (currentSlideIndex >= totalSlides) currentSlideIndex = 0;
@@ -109,17 +110,29 @@ function goToSlide(index) {
 }
 
 function updateSliderPosition() {
+    // 1. 移动图片排布
     const wrapper = document.getElementById('slider-wrapper');
     wrapper.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
     
-    // 更新点指示器状态
+    // 2. 更新圆点激活状态
     const dots = document.querySelectorAll('.dot');
     dots.forEach((dot, index) => {
         dot.classList.toggle('active', index === currentSlideIndex);
     });
+
+    // 3. 【核心新增】更新并优雅显示图片描述
+    const captionContainer = document.getElementById('slider-caption');
+    const currentImg = currentImagesArray[currentSlideIndex];
+
+    if (currentImg && currentImg.caption) {
+        captionContainer.innerText = currentImg.caption;
+        captionContainer.classList.add('active'); // 有文字，显示黑底白字
+    } else {
+        captionContainer.classList.remove('active'); // 没文字，或者为空，自动隐藏黑底
+    }
 }
 
-// 点击弹窗外部遮罩也可以关闭弹窗
+// 点击弹窗外部遮罩关闭
 document.getElementById('details-modal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
 });
