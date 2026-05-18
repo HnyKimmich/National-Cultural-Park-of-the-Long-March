@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>长征纪念公园数字地图展示</title>
+    <!-- Leaflet 地图库 CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- 字体图标库（用于右上角X和切换箭头） -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 地图容器 -->
+    <div id="map"></div>
+
+    <!-- 顶栏标题（提升比赛视觉高级感） -->
+    <div class="map-title">
+        <h1>长征纪念公园成果展示系统</h1>
+        <p>点击地图红星标点查看公园详情</p>
+    </div>
+
+    <!-- 页中页弹窗 (Modal) -->
+    <div id="details-modal" class="modal-overlay">
+        <div class="modal-content">
+            <!-- 关闭按钮 -->
+            <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            
+            <div class="modal-body">
+                <!-- 左侧/上方：高级滑动图片栏 -->
+                <div class="image-slider-container" id="slider-container">
+                    <div class="slider-wrapper" id="slider-wrapper">
+                        <!-- 图片由JS动态渲染 -->
+                    </div>
+                    <!-- 切换箭头 -->
+                    <button class="slide-arrow prev" onclick="moveSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slide-arrow next" onclick="moveSlide(1)"><i class="fas fa-chevron-right"></i></button>
+                    <!-- 页码指示器 -->
+                    <div class="slider-dots" id="slider-dots"></div>
+                </div>
+
+                <!-- 右侧/下方：属性详情栏 -->
+                <div class="info-panel">
+                    <h2 id="info-name">公园名称</h2>
+                    <div class="tags" id="info-keywords"></div>
+                    
+                    <div class="info-item">
+                        <span class="label"><i class="fas fa-map-marker-alt"></i> 地点：</span>
+                        <span id="info-address"></span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="label"><i class="fas fa-history"></i> 历史事件：</span>
+                        <p id="info-history"></p>
+                    </div>
+
+                    <div id="info-link-container">
+                        <!-- 官方入口由JS动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入数据和逻辑脚本 -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
