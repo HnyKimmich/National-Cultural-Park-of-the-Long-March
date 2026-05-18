@@ -42,7 +42,7 @@ function openModal(park) {
     // 填充文本与标签
     document.getElementById('info-name').innerText = park.name;
     document.getElementById('info-address').innerText = park.address || "暂无详细地址";
-    document.getElementById('info-history').innerText = park.history || "暂无历史事件记载";
+    document.getElementById('info-history').innerText = park.history || "";
 
     // 渲染关键词标签
     const tagsContainer = document.getElementById('info-keywords');
